@@ -23,20 +23,6 @@ return {
     enabled = false,
   },
 
-  -- My custom plugin Ressurect
-  {
-    "Salanoid/resurrect.nvim",
-    event = { "BufReadPost", "BufWinEnter" }, -- Lazy load for file events
-    config = function()
-        require("resurrect").setup({
-            ignore_filetypes = { "gitcommit", "help" }, -- Customize ignored filetypes
-            ignore_buftypes = { "nofile", "quickfix" }, -- Customize ignored buftypes
-            open_folds = true, -- Automatically open folds
-            project_file = ".nvim_resurrect", -- File to store last opened file in the project
-        })
-    end,
-  },
-
   -- Harpoon for quick file navigation
   {
     "ThePrimeagen/harpoon",
