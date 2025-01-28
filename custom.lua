@@ -5,21 +5,9 @@
 
 return {
   -- ========== Core Navigation ==========
-  -- Disable Neo-tree and other UI plugins for tabs/windows
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    enabled = false,
-  },
+  -- Disable bufferline, replace it with Harpoon
   {
     "akinsho/bufferline.nvim",
-    enabled = false,
-  },
-  {
-    "romgrk/barbar.nvim",
-    enabled = false,
-  },
-  {
-    "folke/edgy.nvim",
     enabled = false,
   },
 
