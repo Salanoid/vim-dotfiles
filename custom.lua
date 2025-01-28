@@ -5,24 +5,25 @@
 
 return {
   -- ========== Core Navigation ==========
-  -- Disable Neo-tree
+  -- Disable Neo-tree and other UI plugins for tabs/windows
   {
     "nvim-neo-tree/neo-tree.nvim",
     enabled = false,
   },
-  -- Disable tab and window management plugins
   {
-      "akinsho/bufferline.nvim", -- Bufferline for tabs
-      enabled = false,
+    "akinsho/bufferline.nvim",
+    enabled = false,
   },
   {
-      "romgrk/barbar.nvim", -- Barbar for tabs (if used)
-      enabled = false,
+    "romgrk/barbar.nvim",
+    enabled = false,
   },
   {
-      "folke/edgy.nvim", -- Edgy for window management
-      enabled = false,
+    "folke/edgy.nvim",
+    enabled = false,
   },
+
+  -- Harpoon for quick file navigation
   {
     "ThePrimeagen/harpoon",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -33,15 +34,18 @@ return {
           enter_on_sendcmd = true,
         },
       })
-      vim.keymap.set("n", "<leader>ha", require("harpoon.mark").add_file, { desc = "Harpoon Add" })
+      vim.keymap.set("n", "<leader>ha", require("harpoon.mark").add_file, { desc = "Harpoon Add File" })
       vim.keymap.set("n", "<leader>hh", require("harpoon.ui").toggle_quick_menu, { desc = "Harpoon Menu" })
       for i = 1, 4 do
-        vim.keymap.set("n", "<leader>"..i, function() require("harpoon.ui").nav_file(i) end, { desc = "Harpoon File "..i })
+        vim.keymap.set("n", "<leader>" .. i, function()
+          require("harpoon.ui").nav_file(i)
+        end, { desc = "Navigate to Harpoon File " .. i })
       end
     end,
   },
 
-  -- ========== AI & Chat ==========
+  -- ========== AI & Chat Integration ==========
+  -- Copilot for AI-powered code suggestions
   {
     "github/copilot.vim",
     event = "InsertEnter",
@@ -50,79 +54,82 @@ return {
       vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
     end,
   },
+  -- Copilot Chat for interactive AI assistance
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     dependencies = { "github/copilot.vim" },
     opts = {
       show_help = "yes",
-      question_header = "## User ",
-      answer_header = "## Copilot ",
+      question_header = "## User",
+      answer_header = "## Copilot",
     },
     keys = {
-      { "<leader>cc", "<cmd>CopilotChatToggle<CR>", desc = "Copilot Chat" },
-      { "<leader>cr", "<cmd>CopilotChatReview<CR>", desc = "Code Review" },
+      { "<leader>cc", "<cmd>CopilotChatToggle<CR>", desc = "Toggle Copilot Chat" },
+      { "<leader>cr", "<cmd>CopilotChatReview<CR>", desc = "Code Review with Copilot" },
       { "<leader>cp", "<cmd>CopilotChatPrompt<CR>", desc = "Copilot Prompt" },
     },
   },
 
   -- ========== Language Support ==========
+  -- Treesitter for syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
         "ruby", "elixir", "rust", "javascript", "typescript", "clojure",
-        "heex", "eex", "tsx", "lua", "vim", "bash", "markdown", "json"
+        "heex", "eex", "tsx", "lua", "vim", "bash", "markdown", "json",
       },
     },
   },
+  -- Mason for managing LSP servers
   {
     "williamboman/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
         "ruby_lsp", "elixirls", "rust_analyzer", "tsserver",
-        "clojure_lsp", "denols", "tailwindcss", "html", "cssls"
+        "clojure_lsp", "denols", "tailwindcss", "html", "cssls",
       },
     },
   },
+  -- Elixir language support
   {
     "mhanberg/elixir.nvim",
     ft = "elixir",
     config = function()
-      require("elixir").setup({ nextls = { enable = true }, credo = {} })
+      require("elixir").setup({
+        nextls = { enable = true },
+        credo = {},
+      })
     end,
   },
+  -- Rust tools
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
-    config = function() require("rust-tools").setup() end,
+    config = function()
+      require("rust-tools").setup()
+    end,
   },
+  -- Clojure tools
   {
     "Olical/conjure",
     ft = "clojure",
-    config = function() vim.g["conjure#mapping#prefix"] = "<leader>c" end,
+    config = function()
+      vim.g["conjure#mapping#prefix"] = "<leader>c"
+    end,
   },
 
   -- ========== Code Review & Collaboration ==========
+  -- Diffview for reviewing code changes
   {
     "sindrets/diffview.nvim",
     dependencies = "nvim-lua/plenary.nvim",
     keys = {
-      { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Diff View" },
-      { "<leader>gD", "<cmd>DiffviewClose<CR>", desc = "Close Diff" },
+      { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Open Diff View" },
+      { "<leader>gD", "<cmd>DiffviewClose<CR>", desc = "Close Diff View" },
     },
   },
-  -- {
-  --   "andrewferrier/review.nvim",
-  --   config = function()
-  --     require("review").setup({
-  --       keymaps = {
-  --         add_annotation = "<leader>ca",
-  --         goto_next_annotation = "]a",
-  --         goto_prev_annotation = "[a",
-  --       }
-  --     })
-  --   end,
-  -- },
+  -- Gitlinker for sharing code
   {
     "ruifm/gitlinker.nvim",
     dependencies = "nvim-lua/plenary.nvim",
@@ -130,69 +137,27 @@ return {
       require("gitlinker").setup({ mappings = "<leader>gy" })
     end,
   },
+  -- LSP Lines for better diagnostics
   {
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function()
-          require("lsp_lines").setup()
-          vim.diagnostic.config({ virtual_text = false })
-          vim.keymap.set("n", "<leader>ul", require("lsp_lines").toggle, { desc = "Toggle LSP Lines" })
-        end,
-      },
-
-  -- ========== Testing & Debugging ==========
-  -- {
-  --   "nvim-neotest/neotest",
-  --   dependencies = {
-  --     "nvim-neotest/neotest-ruby",
-  --     "jfpedroza/neotest-elixir",
-  --     "rouge8/neotest-rust",
-  --     "marilari88/neotest-vitest",
-  --   },
-  --   config = function()
-  --     require("neotest").setup({
-  --       adapters = {
-  --         require("neotest-ruby"),
-  --         require("neotest-elixir"),
-  --         require("neotest-rust"),
-  --         require("neotest-vitest"),
-  --       }
-  --     })
-  --     vim.keymap.set("n", "<leader>tt", "<cmd>Neotest run<CR>", { desc = "Test Run" })
-  --     vim.keymap.set("n", "<leader>tf", "<cmd>Neotest run-file<CR>", { desc = "Test File" })
-  --   end,
-  -- },
-  {
-    "mfussenegger/nvim-dap",
     config = function()
-      require("dap").adapters.ruby = {
-        type = "server",
-        host = "127.0.0.1",
-        port = "${port}",
-        executable = {
-          command = "bundle",
-          args = { "exec", "rdbg", "-n", "--open", "--port", "${port}", "-c", "--", "bundle", "exec", "rails", "s" }
-        }
-      }
+      require("lsp_lines").setup()
+      vim.diagnostic.config({ virtual_text = false })
+      vim.keymap.set("n", "<leader>ul", require("lsp_lines").toggle, { desc = "Toggle LSP Lines" })
     end,
   },
 
   -- ========== Quality of Life ==========
+  -- Auto-tag for HTML and JSX
   {
     "windwp/nvim-ts-autotag",
     ft = { "html", "javascript", "typescript", "heex", "eex" },
     config = true,
   },
+  -- Emmet for fast HTML/CSS
   {
     "mattn/emmet-vim",
     ft = { "html", "heex", "javascript", "typescript" },
   },
-  -- {
-  --   "gorbit99/codewindow.nvim",
-  --   config = function() require("codewindow").setup().apply_default_keybinds() end,
-  -- },
-  -- {
-  --   "tenxsoydev/nx.nvim",
-  --   dependencies = "nvim-treesitter/nvim-treesitter",
-  --   opts = { nx_runnable_filetypes = { "ruby", "elixir", "typescript" } },
-  -- },
 }
+
